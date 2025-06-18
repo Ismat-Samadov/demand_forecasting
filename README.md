@@ -219,11 +219,11 @@ LinearRegression(
 demand_forecasting/
 │
 ├── 📄 main.py                     # FastAPI application entry point
+├── 📄 test_comprehensive.py       # Complete test suite
 ├── 📄 requirements.txt            # Python dependencies
 ├── 📄 runtime.txt                 # Python version for deployment
 ├── 📄 Procfile                    # Deployment configuration
 ├── 📄 render.yaml                 # Cloud deployment settings
-├── 📄 test_comprehensive.py       # Complete test suite
 ├── 📄 LICENSE                     # MIT license
 │
 ├── 📁 models/                     # Machine Learning Models
@@ -246,7 +246,8 @@ demand_forecasting/
 │
 ├── 📁 static/                     # Frontend Assets
 │   ├── 📄 styles.css                     # Dashboard styling
-│   └── 📄 app.js                         # Interactive JavaScript
+│   ├── 📄 app.js                         # Interactive JavaScript
+│   └── 📄 preview.png                    # Dashboard preview image
 │
 └── 📁 venv/                       # Virtual Environment (created locally)
 ```
