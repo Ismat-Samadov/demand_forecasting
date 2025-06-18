@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Demand Forecasting Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>> AI Demand Forecasting System</h1>
+            <p>Improving accuracy and reducing supply chain costs with machine learning</p>
+        </header>
+
+        <div class="dashboard">
+            <!-- Model Performance Section -->
+            <div class="card">
+                <h2>=� Model Performance</h2>
+                <div class="metrics-grid">
+                    {% if model_scores %}
+                        {% for model_name, metrics in model_scores.items() %}
+                        <div class="metric-card">
+                            <h3>{{ model_name.upper() }}</h3>
+                            <div class="metric">
+                                <span class="metric-label">MAE:</span>
+                                <span class="metric-value">{{ "%.4f"|format(metrics.mae) }}</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">RMSE:</span>
+                                <span class="metric-value">{{ "%.4f"|format(metrics.rmse) }}</span>
+                            </div>
+                            {% if model_name == best_model %}
+                            <div class="best-model-badge"> Best Model</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p>No model performance data available. Train a model first.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Prediction Form -->
+            <div class="card">
+                <h2>=. Make Prediction</h2>
+                <form id="predictionForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="item_id">Item ID:</label>
+                            <input type="text" id="item_id" name="item_id" required placeholder="e.g., HOBBIES_1_001">
+                        </div>
+                        <div class="form-group">
+                            <label for="store_id">Store ID:</label>
+                            <select id="store_id" name="store_id" required>
+                                <option value="">Select Store</option>
+                                <option value="CA_1">CA_1</option>
+                                <option value="CA_2">CA_2</option>
+                                <option value="CA_3">CA_3</option>
+                                <option value="CA_4">CA_4</option>
+                                <option value="TX_1">TX_1</option>
+                                <option value="TX_2">TX_2</option>
+                                <option value="TX_3">TX_3</option>
+                                <option value="WI_1">WI_1</option>
+                                <option value="WI_2">WI_2</option>
+                                <option value="WI_3">WI_3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dept_id">Department:</label>
+                            <select id="dept_id" name="dept_id" required>
+                                <option value="">Select Department</option>
+                                <option value="HOBBIES_1">HOBBIES_1</option>
+                                <option value="HOBBIES_2">HOBBIES_2</option>
+                                <option value="HOUSEHOLD_1">HOUSEHOLD_1</option>
+                                <option value="HOUSEHOLD_2">HOUSEHOLD_2</option>
+                                <option value="FOODS_1">FOODS_1</option>
+                                <option value="FOODS_2">FOODS_2</option>
+                                <option value="FOODS_3">FOODS_3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sell_price">Sell Price ($):</label>
+                            <input type="number" id="sell_price" name="sell_price" step="0.01" required placeholder="9.99">
+                        </div>
+                        <div class="form-group">
+                            <label for="prediction_date">Prediction Date:</label>
+                            <input type="date" id="prediction_date" name="prediction_date" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="has_event" name="has_event">
+                                Special Event Day
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">=� Predict Demand</button>
+                </form>
+                
+                <div id="predictionResult" class="prediction-result" style="display: none;">
+                    <h3>Prediction Result</h3>
+                    <div class="result-display">
+                        <span class="result-label">Predicted Demand:</span>
+                        <span id="predictedValue" class="result-value"></span>
+                        <span class="result-unit">units</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Importance -->
+            <div class="card">
+                <h2><� Feature Importance</h2>
+                {% if feature_importance %}
+                <div class="importance-chart">
+                    <canvas id="importanceChart"></canvas>
+                </div>
+                <div class="importance-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Feature</th>
+                                <th>Importance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for idx, row in feature_importance.iterrows() %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ row.feature }}</td>
+                                <td>{{ "%.4f"|format(row.importance) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>Feature importance data not available. Train a tree-based model first.</p>
+                {% endif %}
+            </div>
+
+            <!-- Data Insights -->
+            <div class="card">
+                <h2>=� Data Insights</h2>
+                <div class="insights-grid">
+                    <div class="insight-item">
+                        <h4>Total Products</h4>
+                        <span class="insight-number">{{ data_stats.total_products if data_stats else 'N/A' }}</span>
+                    </div>
+                    <div class="insight-item">
+                        <h4>Total Stores</h4>
+                        <span class="insight-number">{{ data_stats.total_stores if data_stats else 'N/A' }}</span>
+                    </div>
+                    <div class="insight-item">
+                        <h4>Date Range</h4>
+                        <span class="insight-number">{{ data_stats.date_range if data_stats else 'N/A' }}</span>
+                    </div>
+                    <div class="insight-item">
+                        <h4>Avg Daily Sales</h4>
+                        <span class="insight-number">{{ data_stats.avg_daily_sales if data_stats else 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>=, Built with AI for Supply Chain Optimization | Reducing costs through accurate demand prediction</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    
+    {% if feature_importance %}
+    <script>
+        // Feature Importance Chart
+        const ctx = document.getElementById('importanceChart').getContext('2d');
+        const importanceData = {{ feature_importance.to_dict('records')|tojson|safe }};
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: importanceData.slice(0, 10).map(function(item) { return item.feature; }),
+                datasets: [{
+                    label: 'Feature Importance',
+                    data: importanceData.slice(0, 10).map(function(item) { return item.importance; }),
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top 10 Most Important Features'
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+</html>
