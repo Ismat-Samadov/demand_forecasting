@@ -14,7 +14,7 @@ An intelligent demand forecasting system that improves inventory accuracy and re
 
 > ⏱️ **Note**: This is deployed on a free tier, so please allow **3-4 minutes** for the server to wake up on first visit. Subsequent requests will be fast!
 
-![Dashboard Preview](https://via.placeholder.com/800x400/667eea/ffffff?text=AI+Demand+Forecasting+Dashboard)
+![Dashboard Preview]('static/prev.png')
 
 ## 🎯 Business Impact
 
