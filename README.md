@@ -223,16 +223,13 @@ demand_forecasting/
 ├── 📄 runtime.txt                 # Python version for deployment
 ├── 📄 Procfile                    # Deployment configuration
 ├── 📄 render.yaml                 # Cloud deployment settings
-├── 📄 test_system.py              # Comprehensive system tests
-├── 📄 test_api.py                 # API endpoint tests
+├── 📄 test_comprehensive.py       # Complete test suite
 ├── 📄 LICENSE                     # MIT license
 │
 ├── 📁 models/                     # Machine Learning Models
 │   ├── 📄 demand_forecasting_model.py    # Main ML model class
 │   ├── 📄 training.py                    # Quick training script
 │   ├── 📄 real_training.py               # Production training pipeline
-│   ├── 📄 simple_training.py             # Basic model for testing
-│   ├── 📄 create_mock_model.py           # Mock model generator
 │   ├── 📄 demand_forecasting_model.pkl   # Trained model (generated)
 │   ├── 📄 training_report.md             # Training results (generated)
 │   └── 📄 real_training_report.md        # Production training log
@@ -259,13 +256,13 @@ demand_forecasting/
 #### **Core Application**
 - **`main.py`**: FastAPI web server with REST endpoints and dashboard
 - **`requirements.txt`**: All Python dependencies with versions
-- **`test_system.py`**: End-to-end testing suite
+- **`test_comprehensive.py`**: Complete testing suite covering all functionality
 
 #### **Machine Learning**
 - **`demand_forecasting_model.py`**: Complete ML pipeline class with preprocessing
 - **`real_training.py`**: Production training script with full dataset
 - **`training.py`**: Quick training for development/testing
-- **`.pkl files`**: Serialized trained models
+- **`demand_forecasting_model.pkl`**: Serialized trained model
 
 #### **Data Processing**
 - **`sales_train_evaluation.csv`**: 30K+ product-store combinations × 1,941 days
@@ -365,15 +362,38 @@ curl -X POST "http://localhost:8000/api/predict" \
 
 ## 🧪 Testing & Validation
 
-### Run All Tests
+### 🔬 **Comprehensive Test Suite**
+
+Run the complete test suite that covers all system functionality:
+
 ```bash
-# System integration tests
-python test_system.py
+# Run all tests (recommended)
+python test_comprehensive.py
+```
 
-# API endpoint tests  
-python test_api.py
+**Test Coverage:**
+- ✅ **Data Files**: Validates dataset integrity and structure
+- ✅ **Model Functionality**: Tests ML models, training, and predictions
+- ✅ **API Endpoints**: Validates all REST API responses
+- ✅ **Feature Engineering**: Tests preprocessing pipeline
+- ✅ **Error Handling**: Tests edge cases and invalid inputs
+- ✅ **Performance**: Measures prediction speed and accuracy
 
-# Model validation
+### 🎯 **Individual Test Categories**
+
+```bash
+# Test specific components
+python -c "
+from test_comprehensive import DemandForecastingTester
+tester = DemandForecastingTester()
+
+# Run specific test categories
+tester.test_data_files()
+tester.test_model_functionality()
+tester.test_api_endpoints()
+"
+
+# Model training validation
 cd models && python training.py
 ```
 
