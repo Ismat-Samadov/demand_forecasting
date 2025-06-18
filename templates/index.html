@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Demand Forecasting Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
     <link rel="stylesheet" href="/static/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -226,25 +227,34 @@
 
             <!-- Data Insights -->
             <div class="card">
-                <h2>📈 Data Insights</h2>
+                <h2>📈 Dataset Overview</h2>
                 <div class="insights-grid">
                     <div class="insight-item">
-                        <h4>Total Products</h4>
+                        <h4>🛍️ Total Products</h4>
                         <span class="insight-number">{{ data_stats.total_products if data_stats else 'N/A' }}</span>
+                        <small>Unique SKUs tracked</small>
                     </div>
                     <div class="insight-item">
-                        <h4>Total Stores</h4>
+                        <h4>🏪 Total Stores</h4>
                         <span class="insight-number">{{ data_stats.total_stores if data_stats else 'N/A' }}</span>
+                        <small>Across 3 states</small>
                     </div>
                     <div class="insight-item">
-                        <h4>Date Range</h4>
+                        <h4>📅 Time Period</h4>
                         <span class="insight-number">{{ data_stats.date_range if data_stats else 'N/A' }}</span>
+                        <small>Historical data span</small>
                     </div>
                     <div class="insight-item">
-                        <h4>Avg Daily Sales</h4>
+                        <h4>📊 Avg Daily Sales</h4>
                         <span class="insight-number">{{ data_stats.avg_daily_sales if data_stats else 'N/A' }}</span>
+                        <small>Per product per store</small>
                     </div>
                 </div>
+                {% if data_stats %}
+                <div class="dataset-info">
+                    <p><strong>💡 Dataset Info:</strong> This model is trained on Walmart M5 competition data covering household, food, and hobby products across California, Texas, and Wisconsin stores. The data includes price information, promotional events, and SNAP benefit indicators for enhanced demand prediction accuracy.</p>
+                </div>
+                {% endif %}
             </div>
         </div>
 
