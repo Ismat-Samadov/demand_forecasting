@@ -268,14 +268,17 @@ async def health_check():
     return {"status": "healthy", "model_loaded": model_loaded}
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    
     print("Starting AI Demand Forecasting System...")
-    print("Dashboard will be available at: http://localhost:8000")
-    print("API documentation at: http://localhost:8000/docs")
+    print(f"Dashboard will be available at: http://0.0.0.0:{port}")
+    print(f"API documentation at: http://0.0.0.0:{port}/docs")
     
     uvicorn.run(
         app, 
         host="0.0.0.0", 
-        port=8000,
-        reload=True,
+        port=port,
+        reload=False,  # Disable reload for production
         log_level="info"
     )
