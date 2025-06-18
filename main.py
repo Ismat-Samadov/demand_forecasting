@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -53,13 +54,13 @@ def load_model():
         if os.path.exists(model_path):
             model.load_model(model_path)
             model_loaded = True
-            print(" Model loaded successfully!")
+            print("Model loaded successfully!")
         else:
-            print("  No pre-trained model found. Please train the model first.")
+            print("No pre-trained model found. Please train the model first.")
             model_loaded = False
             
     except Exception as e:
-        print(f"L Error loading model: {e}")
+        print(f"Error loading model: {e}")
         model_loaded = False
 
 def get_data_stats():
@@ -267,9 +268,9 @@ async def health_check():
     return {"status": "healthy", "model_loaded": model_loaded}
 
 if __name__ == "__main__":
-    print("=€ Starting AI Demand Forecasting System...")
-    print("=Ê Dashboard will be available at: http://localhost:8000")
-    print("=Ö API documentation at: http://localhost:8000/docs")
+    print("Starting AI Demand Forecasting System...")
+    print("Dashboard will be available at: http://localhost:8000")
+    print("API documentation at: http://localhost:8000/docs")
     
     uvicorn.run(
         app, 
