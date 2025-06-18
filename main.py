@@ -22,56 +22,45 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Static files and templates
+# Static files and templates setup
 import os
 from pathlib import Path
 
-# Get absolute paths
+# Set up directories
 base_dir = Path(__file__).parent
-static_dir = base_dir / "static"
+static_dir = base_dir / "static" 
 template_dir = base_dir / "templates"
 
-# Try multiple static directory locations
-static_paths_to_try = [
-    static_dir,
-    Path("static"),  # Relative to working directory
-    Path.cwd() / "static",  # Current working directory
-]
+# Mount static files BEFORE defining routes
+try:
+    # Try the most likely locations for static files
+    if static_dir.exists():
+        app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+        print(f"Static files mounted from: {static_dir}")
+    elif Path("static").exists():
+        app.mount("/static", StaticFiles(directory="static"), name="static")
+        print("Static files mounted from: ./static")
+    else:
+        # Fallback - mount anyway and let it fail gracefully
+        app.mount("/static", StaticFiles(directory="static"), name="static")
+        print("Static files mounted with fallback")
+except Exception as e:
+    print(f"Could not mount static files: {e}")
 
-static_mounted = False
-for static_path in static_paths_to_try:
-    if static_path.exists() and not static_mounted:
-        try:
-            app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
-            print(f"Static files mounted from: {static_path}")
-            static_mounted = True
-            break
-        except Exception as e:
-            print(f"Failed to mount static from {static_path}: {e}")
-
-if not static_mounted:
-    print("Warning: No static directory found, creating fallback route")
-    from fastapi import Response
-    
-    @app.get("/static/{filename}")
-    async def serve_static_fallback(filename: str):
-        return Response("/* Static file not found */", media_type="text/css" if filename.endswith('.css') else "text/javascript")
-
-# Try multiple template directory locations
-template_paths_to_try = [
-    template_dir,
-    Path("templates"),  # Relative to working directory
-    Path.cwd() / "templates",  # Current working directory
-]
-
-template_path = template_dir  # Default
-for tmpl_path in template_paths_to_try:
-    if tmpl_path.exists():
-        template_path = tmpl_path
-        print(f"Templates found at: {template_path}")
-        break
-
-templates = Jinja2Templates(directory=str(template_path))
+# Set up templates
+try:
+    if template_dir.exists():
+        templates = Jinja2Templates(directory=str(template_dir))
+        print(f"Templates loaded from: {template_dir}")
+    elif Path("templates").exists():
+        templates = Jinja2Templates(directory="templates")
+        print("Templates loaded from: ./templates")
+    else:
+        templates = Jinja2Templates(directory="templates")
+        print("Templates loaded with fallback")
+except Exception as e:
+    print(f"Could not load templates: {e}")
+    templates = None
 
 # Global model instance
 model = None
