@@ -1,4 +1,3 @@
-```markdown
 # 🧠 M5 Forecasting – Accuracy Dataset Documentation
 
 This repository contains the official dataset files for the **M5 Forecasting - Accuracy** competition hosted on Kaggle, in which participants forecast the daily unit sales of Walmart products across three US states for a 28-day forecast horizon.
@@ -151,7 +150,3 @@ The competition uses **Weighted Root Mean Squared Scaled Error (WRMSSE)**:
 ## 📬 Contact & License
 
 This dataset is provided under Kaggle's competition terms. For academic use, cite the competition and link to the dataset.
-
----
-
-```
