@@ -109,21 +109,177 @@ Built on the **Walmart M5 Forecasting Competition** dataset:
 
 ## 🔬 Machine Learning Architecture
 
-### Model Pipeline
+### 🎯 System Overview
+
+```mermaid
+graph TB
+    subgraph "Data Sources"
+        D1[📊 Sales Data<br/>30K+ products × 1,941 days]
+        D2[📅 Calendar Data<br/>Events & Holidays]
+        D3[💰 Price Data<br/>6.8M price records]
+    end
+    
+    subgraph "ML Pipeline"
+        P1[🔄 Data Loading & Validation]
+        P2[🛠️ Feature Engineering<br/>25+ Features]
+        P3[🤖 Model Training<br/>RF, GB, LR]
+        P4[⚡ Model Selection<br/>Best MAE]
+        P5[💾 Model Persistence<br/>PKL File]
+    end
+    
+    subgraph "API Layer"
+        A1[🌐 FastAPI Server]
+        A2[📊 Web Dashboard]
+        A3[🔮 Prediction API]
+        A4[📈 Health Monitoring]
+    end
+    
+    subgraph "Frontend"
+        F1[🎨 Interactive UI]
+        F2[📋 Prediction Forms]
+        F3[📊 Feature Charts]
+        F4[📈 Performance Metrics]
+    end
+    
+    D1 --> P1
+    D2 --> P1
+    D3 --> P1
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+    P4 --> P5
+    P5 --> A1
+    A1 --> A2
+    A1 --> A3
+    A1 --> A4
+    A2 --> F1
+    F1 --> F2
+    F1 --> F3
+    F1 --> F4
+```
+
+### 🔄 Feature Engineering Pipeline
+
+```mermaid
+graph LR
+    subgraph "Raw Data"
+        R1[📊 Sales History]
+        R2[📅 Date Info]
+        R3[💰 Price Data]
+        R4[🎉 Events]
+    end
+    
+    subgraph "Temporal Features"
+        T1[📅 day_of_week]
+        T2[📆 day_of_month]
+        T3[📊 week_of_year]
+        T4[🎯 is_weekend]
+    end
+    
+    subgraph "Lag Features"
+        L1[📈 sales_lag_1<br/>Yesterday]
+        L2[📊 sales_lag_7<br/>Last Week]
+        L3[📉 sales_lag_14<br/>2 Weeks Ago]
+        L4[📋 sales_lag_28<br/>Last Month]
+    end
+    
+    subgraph "Rolling Statistics"
+        S1[📊 rolling_mean_7/14/28<br/>Moving Averages]
+        S2[📈 rolling_std_7/14/28<br/>Volatility]
+    end
+    
+    subgraph "Price Intelligence"
+        P1[💰 sell_price<br/>Current Price]
+        P2[💱 price_change<br/>Absolute Change]
+        P3[📊 price_change_pct<br/>% Change]
+        P4[📋 price_lag_1<br/>Previous Price]
+    end
+    
+    subgraph "External Factors"
+        E1[🎉 has_event<br/>Event Flag]
+        E2[🏈 event_types<br/>Sports/Cultural/etc]
+        E3[🏛️ SNAP_benefits<br/>CA/TX/WI]
+    end
+    
+    R2 --> T1
+    R2 --> T2
+    R2 --> T3
+    R2 --> T4
+    
+    R1 --> L1
+    R1 --> L2
+    R1 --> L3
+    R1 --> L4
+    
+    R1 --> S1
+    R1 --> S2
+    
+    R3 --> P1
+    R3 --> P2
+    R3 --> P3
+    R3 --> P4
+    
+    R4 --> E1
+    R4 --> E2
+    R4 --> E3
+```
+
+### 🤖 Model Training & Selection
 
 ```mermaid
 graph TD
-    A[Raw Data] --> B[Data Validation]
-    B --> C[Feature Engineering]
-    C --> D[Model Training]
-    D --> E[Model Selection]
-    E --> F[Prediction API]
+    subgraph "Input Data"
+        I1[📊 Engineered Features<br/>25+ columns]
+        I2[🎯 Target Variable<br/>Daily Sales Units]
+    end
     
-    C --> C1[Lag Features]
-    C --> C2[Rolling Stats]
-    C --> C3[Price Features]
-    C --> C4[Event Features]
-    C --> C5[Time Features]
+    subgraph "Data Split"
+        S1[📚 Training Set<br/>80% - Temporal]
+        S2[🧪 Validation Set<br/>20% - Future dates]
+    end
+    
+    subgraph "Model Training"
+        M1[🌳 Random Forest<br/>n_estimators=100<br/>robust to outliers]
+        M2[🚀 Gradient Boosting<br/>n_estimators=100<br/>sequential learning]
+        M3[📏 Linear Regression<br/>baseline model<br/>fast inference]
+    end
+    
+    subgraph "Evaluation"
+        E1[📊 MAE Calculation<br/>Mean Absolute Error]
+        E2[📈 RMSE Calculation<br/>Root Mean Square Error]
+        E3[🏆 Model Selection<br/>Best MAE wins]
+    end
+    
+    subgraph "Output"
+        O1[💾 Best Model<br/>Saved as PKL]
+        O2[📋 Performance Report<br/>Metrics & Features]
+        O3[🎯 Feature Importance<br/>Top contributors]
+    end
+    
+    I1 --> S1
+    I2 --> S1
+    I1 --> S2
+    I2 --> S2
+    
+    S1 --> M1
+    S1 --> M2
+    S1 --> M3
+    
+    M1 --> E1
+    M2 --> E1
+    M3 --> E1
+    
+    M1 --> E2
+    M2 --> E2
+    M3 --> E2
+    
+    E1 --> E3
+    E2 --> E3
+    
+    E3 --> O1
+    E3 --> O2
+    M1 --> O3
+    M2 --> O3
 ```
 
 ### 🎯 Feature Engineering (25+ Features)
@@ -281,6 +437,105 @@ demand_forecasting/
 - **`runtime.txt`**: Python version specification
 
 ## 🔌 API Reference
+
+### 🌐 API Architecture Flow
+
+```mermaid
+graph TD
+    subgraph "Client Layer"
+        C1[🌐 Web Browser]
+        C2[📱 Mobile App]
+        C3[🔧 API Client]
+        C4[📊 Dashboard User]
+    end
+    
+    subgraph "FastAPI Server"
+        A1[🚪 Request Router]
+        A2[🔒 Request Validation]
+        A3[📊 Business Logic]
+        A4[📤 Response Formatter]
+    end
+    
+    subgraph "Endpoints"
+        E1[🏠 GET /<br/>Dashboard]
+        E2[🔮 POST /api/predict<br/>Make Prediction]
+        E3[🎯 POST /api/train<br/>Train Model]
+        E4[📊 GET /api/model/status<br/>Model Info]
+        E5[❤️ GET /health<br/>Health Check]
+    end
+    
+    subgraph "ML Layer"
+        M1[🤖 Trained Model<br/>PKL File]
+        M2[🛠️ Feature Engineering]
+        M3[⚡ Prediction Engine]
+        M4[📈 Performance Metrics]
+    end
+    
+    subgraph "Data Layer"
+        D1[📊 Historical Data<br/>CSV Files]
+        D2[💾 Model Storage<br/>File System]
+        D3[📋 Temp Processing<br/>In-Memory]
+    end
+    
+    C1 --> A1
+    C2 --> A1
+    C3 --> A1
+    C4 --> A1
+    
+    A1 --> A2
+    A2 --> A3
+    A3 --> A4
+    
+    A3 --> E1
+    A3 --> E2
+    A3 --> E3
+    A3 --> E4
+    A3 --> E5
+    
+    E2 --> M2
+    E3 --> M1
+    E4 --> M4
+    M2 --> M3
+    M3 --> M1
+    
+    M1 --> D2
+    M2 --> D3
+    E3 --> D1
+```
+
+### 🔄 Prediction Request Flow
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 User
+    participant F as 🌐 Frontend
+    participant A as ⚡ FastAPI
+    participant V as ✅ Validator
+    participant E as 🛠️ Feature Engineer
+    participant M as 🤖 ML Model
+    participant R as 📤 Response
+    
+    U->>F: Fill prediction form
+    F->>F: Validate inputs
+    F->>A: POST /api/predict
+    A->>V: Validate request data
+    
+    alt Valid Request
+        V->>E: Parse & engineer features
+        E->>E: Create 25+ features
+        E->>M: Send feature vector
+        M->>M: Load trained model
+        M->>M: Make prediction
+        M->>R: Return prediction value
+        R->>A: Format response
+        A->>F: JSON response
+        F->>U: Display prediction
+    else Invalid Request
+        V->>A: Return validation error
+        A->>F: Error response
+        F->>U: Show error message
+    end
+```
 
 ### **Main Endpoints**
 
