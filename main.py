@@ -23,8 +23,16 @@ app = FastAPI(
 )
 
 # Static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+import os
+static_dir = os.path.join(os.path.dirname(__file__), "static")
+template_dir = os.path.join(os.path.dirname(__file__), "templates")
+
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+else:
+    print(f"Warning: Static directory not found at {static_dir}")
+
+templates = Jinja2Templates(directory=template_dir)
 
 # Global model instance
 model = None
@@ -266,6 +274,29 @@ async def model_status():
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "model_loaded": model_loaded}
+
+@app.get("/debug")
+async def debug_info():
+    """Debug endpoint to check file structure"""
+    import os
+    current_dir = os.getcwd()
+    files = os.listdir(current_dir)
+    
+    debug_info = {
+        "current_directory": current_dir,
+        "files_in_directory": files,
+        "static_exists": os.path.exists("static"),
+        "templates_exists": os.path.exists("templates"),
+        "model_exists": os.path.exists("demand_forecasting_model.pkl"),
+        "models_dir_exists": os.path.exists("models")
+    }
+    
+    if os.path.exists("static"):
+        debug_info["static_files"] = os.listdir("static")
+    if os.path.exists("templates"):  
+        debug_info["template_files"] = os.listdir("templates")
+        
+    return debug_info
 
 if __name__ == "__main__":
     import os
