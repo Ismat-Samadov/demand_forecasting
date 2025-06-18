@@ -24,15 +24,54 @@ app = FastAPI(
 
 # Static files and templates
 import os
-static_dir = os.path.join(os.path.dirname(__file__), "static")
-template_dir = os.path.join(os.path.dirname(__file__), "templates")
+from pathlib import Path
 
-if os.path.exists(static_dir):
-    app.mount("/static", StaticFiles(directory=static_dir), name="static")
-else:
-    print(f"Warning: Static directory not found at {static_dir}")
+# Get absolute paths
+base_dir = Path(__file__).parent
+static_dir = base_dir / "static"
+template_dir = base_dir / "templates"
 
-templates = Jinja2Templates(directory=template_dir)
+# Try multiple static directory locations
+static_paths_to_try = [
+    static_dir,
+    Path("static"),  # Relative to working directory
+    Path.cwd() / "static",  # Current working directory
+]
+
+static_mounted = False
+for static_path in static_paths_to_try:
+    if static_path.exists() and not static_mounted:
+        try:
+            app.mount("/static", StaticFiles(directory=str(static_path)), name="static")
+            print(f"Static files mounted from: {static_path}")
+            static_mounted = True
+            break
+        except Exception as e:
+            print(f"Failed to mount static from {static_path}: {e}")
+
+if not static_mounted:
+    print("Warning: No static directory found, creating fallback route")
+    from fastapi import Response
+    
+    @app.get("/static/{filename}")
+    async def serve_static_fallback(filename: str):
+        return Response("/* Static file not found */", media_type="text/css" if filename.endswith('.css') else "text/javascript")
+
+# Try multiple template directory locations
+template_paths_to_try = [
+    template_dir,
+    Path("templates"),  # Relative to working directory
+    Path.cwd() / "templates",  # Current working directory
+]
+
+template_path = template_dir  # Default
+for tmpl_path in template_paths_to_try:
+    if tmpl_path.exists():
+        template_path = tmpl_path
+        print(f"Templates found at: {template_path}")
+        break
+
+templates = Jinja2Templates(directory=str(template_path))
 
 # Global model instance
 model = None
