@@ -141,8 +141,10 @@ async def dashboard(request: Request):
         # Get feature importance
         try:
             feature_importance = model.get_feature_importance()
-            if feature_importance is not None:
+            if feature_importance is not None and not feature_importance.empty:
                 feature_importance = feature_importance.head(15)
+            else:
+                feature_importance = None
         except:
             feature_importance = None
     
