@@ -140,12 +140,17 @@ async def dashboard(request: Request):
         
         # Get feature importance
         try:
-            feature_importance = model.get_feature_importance()
-            if feature_importance is not None and not feature_importance.empty:
-                feature_importance = feature_importance.head(15)
+            feature_importance_df = model.get_feature_importance()
+            if feature_importance_df is not None and not feature_importance_df.empty:
+                # Keep the DataFrame but ensure it's not empty
+                feature_importance = feature_importance_df.head(15)
+                # Double-check it's not empty after head()
+                if feature_importance.empty:
+                    feature_importance = None
             else:
                 feature_importance = None
-        except:
+        except Exception as e:
+            print(f"Error getting feature importance: {e}")
             feature_importance = None
     
     # Get data statistics

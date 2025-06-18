@@ -193,7 +193,7 @@
             <!-- Feature Importance -->
             <div class="card">
                 <h2>🎯 Feature Importance</h2>
-                {% if feature_importance %}
+                {% if feature_importance is not none %}
                 <div class="importance-chart">
                     <canvas id="importanceChart"></canvas>
                 </div>
@@ -253,7 +253,7 @@
 
     <script src="/static/app.js"></script>
     
-    {% if feature_importance %}
+    {% if feature_importance is not none %}
     <script>
         // Feature Importance Chart
         const ctx = document.getElementById('importanceChart').getContext('2d');
