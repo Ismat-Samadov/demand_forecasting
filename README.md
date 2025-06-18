@@ -14,7 +14,7 @@ An intelligent demand forecasting system that improves inventory accuracy and re
 
 > ⏱️ **Note**: This is deployed on a free tier, so please allow **3-4 minutes** for the server to wake up on first visit. Subsequent requests will be fast!
 
-![Dashboard Preview](https://github.com/Ismat-Samadov/demand_forecasting/blob/main/static/prev.png)
+![Dashboard Preview](https://github.com/Ismat-Samadov/demand_forecasting/blob/main/static/preview.png)
 
 ## 🎯 Business Impact
 
