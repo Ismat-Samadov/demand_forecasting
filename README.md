@@ -794,25 +794,25 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "Component Testing"
-        C1[📊 Data Layer<br/>✅ Files<br/>✅ Loading<br/>✅ Validation]
-        C2[🤖 ML Layer<br/>✅ Training<br/>✅ Prediction<br/>✅ Persistence]
-        C3[🌐 API Layer<br/>✅ Endpoints<br/>✅ Validation<br/>✅ Responses]
-        C4[🎨 Frontend<br/>✅ Templates<br/>✅ Static Files<br/>✅ Forms]
+    subgraph ComponentTesting ["Component Testing"]
+        C1["📊 Data Layer<br/>✅ Files<br/>✅ Loading<br/>✅ Validation"]
+        C2["🤖 ML Layer<br/>✅ Training<br/>✅ Prediction<br/>✅ Persistence"]
+        C3["🌐 API Layer<br/>✅ Endpoints<br/>✅ Validation<br/>✅ Responses"]
+        C4["🎨 Frontend<br/>✅ Templates<br/>✅ Static Files<br/>✅ Forms"]
     end
     
-    subgraph "Integration Testing"
-        I1[🔄 End-to-End<br/>Complete workflow]
-        I2[📊 Data Pipeline<br/>Raw → Features → Model]
-        I3[🌐 API Integration<br/>Request → Process → Response]
-        I4[⚡ Performance<br/>Speed & Accuracy]
+    subgraph IntegrationTesting ["Integration Testing"]
+        I1["🔄 End-to-End<br/>Complete workflow"]
+        I2["📊 Data Pipeline<br/>Raw to Features to Model"]
+        I3["🌐 API Integration<br/>Request Process Response"]
+        I4["⚡ Performance<br/>Speed and Accuracy"]
     end
     
-    subgraph "Quality Metrics"
-        Q1[📈 93.1% Pass Rate]
-        Q2[⚡ 0.12s Execution]
-        Q3[🎯 27/29 Tests Pass]
-        Q4[⏭️ 2 Skipped (API)]
+    subgraph QualityMetrics ["Quality Metrics"]
+        Q1["📈 93.1 Percent Pass Rate"]
+        Q2["⚡ 0.12s Execution"]
+        Q3["🎯 27 of 29 Tests Pass"]
+        Q4["⏭️ 2 Skipped API Tests"]
     end
     
     C1 --> I1
