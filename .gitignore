@@ -5,8 +5,41 @@ __pycache__/
 *.csv
 # C extensions
 *.so
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Development files
+test_*.py
+*_test.py
+PROJECT_PLAN.md
+
+# Training scripts (keep only final model)
+models/create_mock_model.py
+models/real_training.py  
+models/simple_training.py
+models/training.py
+models/training_report.md
+
+# OS
 .DS_Store
-# Distribution / packaging
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+
+# Large data files (optional)
+data/sales_train_evaluation.csv
+data/sales_train_validation.csv
+data/sell_prices.csv
+EOF < /dev/null# Distribution / packaging
 .Python
 build/
 develop-eggs/
