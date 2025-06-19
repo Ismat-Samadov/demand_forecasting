@@ -92,6 +92,112 @@ python main.py
 
 ## 📊 Dataset Overview
 
+### 🔄 Data Flow Architecture
+
+```mermaid
+graph TB
+    subgraph "Raw Data Sources"
+        R1[📊 sales_train_evaluation.csv<br/>30K+ rows × 1,941 days<br/>Daily unit sales]
+        R2[📅 calendar.csv<br/>1,969 rows × 14 columns<br/>Date features & events]
+        R3[💰 sell_prices.csv<br/>6.8M rows × 4 columns<br/>Weekly pricing data]
+    end
+    
+    subgraph "Data Loading & Validation"
+        L1[📂 File Existence Check]
+        L2[📊 Data Type Validation]
+        L3[🔍 Missing Value Analysis]
+        L4[📈 Data Quality Metrics]
+    end
+    
+    subgraph "Data Transformation"
+        T1[🔄 Wide to Long Format<br/>Melt sales columns]
+        T2[🔗 Join Calendar Data<br/>Add date features]
+        T3[💰 Merge Price Data<br/>Weekly price lookup]
+        T4[🧹 Handle Missing Values<br/>Median imputation]
+    end
+    
+    subgraph "Feature Engineering"
+        F1[⏰ Temporal Features<br/>day_of_week, month, etc.]
+        F2[📈 Lag Features<br/>sales_lag_1,7,14,28]
+        F3[📊 Rolling Statistics<br/>Moving averages & std]
+        F4[💱 Price Features<br/>price_change, price_pct]
+        F5[🎉 Event Features<br/>holidays, sports, etc.]
+        F6[🏛️ SNAP Features<br/>CA, TX, WI benefits]
+    end
+    
+    subgraph "Model Ready Data"
+        M1[🎯 Feature Matrix<br/>25+ engineered features]
+        M2[📊 Target Variable<br/>Daily sales units]
+        M3[✂️ Train/Test Split<br/>Temporal 80/20]
+    end
+    
+    R1 --> L1
+    R2 --> L1
+    R3 --> L1
+    
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    
+    L4 --> T1
+    T1 --> T2
+    T2 --> T3
+    T3 --> T4
+    
+    T4 --> F1
+    T4 --> F2
+    T4 --> F3
+    T4 --> F4
+    T4 --> F5
+    T4 --> F6
+    
+    F1 --> M1
+    F2 --> M1
+    F3 --> M1
+    F4 --> M1
+    F5 --> M1
+    F6 --> M1
+    
+    T4 --> M2
+    M1 --> M3
+    M2 --> M3
+```
+
+### 📈 Data Transformation Pipeline
+
+```mermaid
+graph LR
+    subgraph "Input Format"
+        I1[📊 Wide Format<br/>1 row per product<br/>1,941 day columns]
+        I2[📅 Calendar Info<br/>Date mappings<br/>Event data]
+        I3[💰 Price History<br/>Weekly prices<br/>Store-item pairs]
+    end
+    
+    subgraph "Processing Steps"
+        P1[🔄 Melt Operation<br/>Wide → Long format]
+        P2[🔗 Calendar Join<br/>Add date features]
+        P3[💰 Price Lookup<br/>Match by week]
+        P4[🛠️ Feature Creation<br/>Engineer 25+ features]
+    end
+    
+    subgraph "Output Format"
+        O1[📊 Long Format<br/>~60M rows<br/>1 row per product-day]
+        O2[🎯 Feature Rich<br/>25+ columns<br/>ML-ready format]
+        O3[📈 Time Series<br/>Properly ordered<br/>No data leakage]
+    end
+    
+    I1 --> P1
+    I2 --> P2
+    I3 --> P3
+    P1 --> P2
+    P2 --> P3
+    P3 --> P4
+    
+    P4 --> O1
+    P4 --> O2
+    P4 --> O3
+```
+
 Built on the **Walmart M5 Forecasting Competition** dataset:
 
 | Component | Description | Size |
@@ -618,6 +724,116 @@ curl -X POST "http://localhost:8000/api/predict" \
 
 ## 🧪 Testing & Validation
 
+### 🔬 Testing Architecture
+
+```mermaid
+graph TB
+    subgraph "Test Categories"
+        T1[📊 Data Files Validation<br/>9 tests]
+        T2[🤖 Model Functionality<br/>8 tests]
+        T3[🛠️ Feature Engineering<br/>4 tests]
+        T4[🔄 Data Preprocessing<br/>3 tests]
+        T5[🌐 API Endpoints<br/>Variable tests]
+        T6[⚠️ Error Handling<br/>Edge cases]
+        T7[⚡ Performance Tests<br/>Speed & accuracy]
+    end
+    
+    subgraph "Test Execution Flow"
+        E1[🚀 Initialize Test Suite]
+        E2[📊 Run Data Tests]
+        E3[🤖 Run Model Tests]
+        E4[🌐 Run API Tests]
+        E5[📈 Generate Report]
+        E6[✅ Pass/Fail Results]
+    end
+    
+    subgraph "Test Results"
+        R1[📈 Pass Rate %]
+        R2[⏱️ Execution Time]
+        R3[📋 Detailed Logs]
+        R4[🚨 Error Reports]
+        R5[📊 Coverage Summary]
+    end
+    
+    subgraph "Validation Checks"
+        V1[✅ Data Integrity]
+        V2[✅ Model Accuracy] 
+        V3[✅ API Responses]
+        V4[✅ Feature Pipeline]
+        V5[✅ Performance SLA]
+    end
+    
+    T1 --> E1
+    T2 --> E1
+    T3 --> E1
+    T4 --> E1
+    T5 --> E1
+    T6 --> E1
+    T7 --> E1
+    
+    E1 --> E2
+    E2 --> E3
+    E3 --> E4
+    E4 --> E5
+    E5 --> E6
+    
+    E6 --> R1
+    E6 --> R2
+    E6 --> R3
+    E6 --> R4
+    E6 --> R5
+    
+    R1 --> V1
+    R1 --> V2
+    R1 --> V3
+    R1 --> V4
+    R1 --> V5
+```
+
+### 🎯 Test Coverage Matrix
+
+```mermaid
+graph LR
+    subgraph "Component Testing"
+        C1[📊 Data Layer<br/>✅ Files<br/>✅ Loading<br/>✅ Validation]
+        C2[🤖 ML Layer<br/>✅ Training<br/>✅ Prediction<br/>✅ Persistence]
+        C3[🌐 API Layer<br/>✅ Endpoints<br/>✅ Validation<br/>✅ Responses]
+        C4[🎨 Frontend<br/>✅ Templates<br/>✅ Static Files<br/>✅ Forms]
+    end
+    
+    subgraph "Integration Testing"
+        I1[🔄 End-to-End<br/>Complete workflow]
+        I2[📊 Data Pipeline<br/>Raw → Features → Model]
+        I3[🌐 API Integration<br/>Request → Process → Response]
+        I4[⚡ Performance<br/>Speed & Accuracy]
+    end
+    
+    subgraph "Quality Metrics"
+        Q1[📈 93.1% Pass Rate]
+        Q2[⚡ 0.12s Execution]
+        Q3[🎯 27/29 Tests Pass]
+        Q4[⏭️ 2 Skipped (API)]
+    end
+    
+    C1 --> I1
+    C2 --> I1
+    C3 --> I1
+    C4 --> I1
+    
+    C1 --> I2
+    C2 --> I2
+    
+    C3 --> I3
+    
+    C2 --> I4
+    C3 --> I4
+    
+    I1 --> Q1
+    I2 --> Q2
+    I3 --> Q3
+    I4 --> Q4
+```
+
 ### 🔬 **Comprehensive Test Suite**
 
 Run the complete test suite that covers all system functionality:
@@ -663,11 +879,112 @@ cd models && python training.py
 
 ## 🚀 Deployment
 
+### 🏗️ Deployment Architecture
+
+```mermaid
+graph TB
+    subgraph "Development Environment"
+        D1[💻 Local Development]
+        D2[🧪 Local Testing]
+        D3[📦 Git Repository]
+    end
+    
+    subgraph "CI/CD Pipeline"
+        C1[🔄 Git Push]
+        C2[⚡ Auto Build]
+        C3[🧪 Run Tests]
+        C4[📦 Create Container]
+        C5[🚀 Deploy]
+    end
+    
+    subgraph "Cloud Infrastructure (Render)"
+        P1[🌐 Load Balancer]
+        P2[🖥️ Web Server<br/>uvicorn main:app]
+        P3[🤖 ML Models<br/>PKL Files]
+        P4[📊 Static Assets<br/>CSS/JS/Images]
+        P5[📈 Health Monitoring]
+    end
+    
+    subgraph "External Services"
+        E1[🌍 CDN<br/>Static Content]
+        E2[📊 Analytics<br/>Usage Metrics]
+        E3[🔍 Monitoring<br/>Uptime/Performance]
+    end
+    
+    subgraph "User Access"
+        U1[🌐 Web Users<br/>Browser Access]
+        U2[📱 API Clients<br/>Direct API]
+        U3[🔗 Live Demo<br/>Public Access]
+    end
+    
+    D1 --> D2
+    D2 --> D3
+    D3 --> C1
+    C1 --> C2
+    C2 --> C3
+    C3 --> C4
+    C4 --> C5
+    
+    C5 --> P1
+    P1 --> P2
+    P2 --> P3
+    P2 --> P4
+    P2 --> P5
+    
+    P4 --> E1
+    P5 --> E2
+    P5 --> E3
+    
+    P1 --> U1
+    P1 --> U2
+    P1 --> U3
+```
+
 ### 🌐 **Live Production Demo**
 This project is already deployed and running at:
 **[https://demand-forecasting-gw2b.onrender.com/](https://demand-forecasting-gw2b.onrender.com/)**
 
 *Deployed on Render's free tier - allow 3-4 minutes for wake-up on first visit*
+
+### 📋 Deployment Configuration
+
+```mermaid
+graph LR
+    subgraph "Configuration Files"
+        C1[📄 Procfile<br/>Process Definition]
+        C2[📄 render.yaml<br/>Cloud Settings]
+        C3[📄 requirements.txt<br/>Dependencies]
+        C4[📄 runtime.txt<br/>Python Version]
+    end
+    
+    subgraph "Environment Setup"
+        E1[🐍 Python 3.13]
+        E2[📦 Install Dependencies]
+        E3[🤖 Load ML Model]
+        E4[🌐 Start FastAPI Server]
+    end
+    
+    subgraph "Runtime"
+        R1[⚡ uvicorn main:app]
+        R2[🌐 Host: 0.0.0.0]
+        R3[🔌 Port: $PORT]
+        R4[📈 Health Checks]
+    end
+    
+    C1 --> E1
+    C2 --> E1
+    C3 --> E2
+    C4 --> E1
+    
+    E1 --> E2
+    E2 --> E3
+    E3 --> E4
+    
+    E4 --> R1
+    R1 --> R2
+    R1 --> R3
+    R1 --> R4
+```
 
 ### Cloud Deployment (Render/Heroku)
 ```bash
