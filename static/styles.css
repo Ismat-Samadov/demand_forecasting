@@ -518,39 +518,343 @@ footer {
     to { transform: rotate(360deg); }
 }
 
-/* Responsive Design */
+/* Enhanced Mobile Responsive Design */
+
+/* Tablet Devices */
+@media (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+}
+
+/* Mobile Landscape */
 @media (max-width: 768px) {
     .container {
         padding: 15px;
+        max-width: 100%;
     }
     
     header h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
+    }
+    
+    header p {
+        font-size: 1.1rem;
+    }
+    
+    .dashboard {
+        gap: 20px;
+    }
+    
+    .card {
+        padding: 20px;
+        margin: 0;
     }
     
     .form-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .form-section {
+        padding: 20px;
     }
     
     .metrics-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
     
     .insights-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    /* Better touch targets */
+    .form-group input,
+    .form-group select {
+        padding: 16px;
+        font-size: 1.1rem;
+        min-height: 48px; /* iOS recommendation */
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        min-height: 48px;
+    }
+    
+    .checkbox-label {
+        padding-left: 40px;
+        min-height: 48px;
+        align-items: center;
+    }
+    
+    .checkmark {
+        height: 24px;
+        width: 24px;
+    }
+    
+    /* Form actions stack on mobile */
+    .form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .form-actions .btn-secondary,
+    .form-actions .btn-primary {
+        width: 100%;
+    }
+    
+    /* Result display optimization */
+    .result-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .confidence-badge {
+        align-self: flex-end;
+    }
+    
+    .result-context {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
 }
 
+/* Mobile Portrait */
 @media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        margin-bottom: 30px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .dashboard {
+        gap: 15px;
+    }
+    
+    .card {
+        padding: 15px;
+        border-radius: 12px;
+    }
+    
+    .card h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+    
     .insights-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .insight-item {
+        padding: 15px;
+    }
+    
+    .insight-number {
+        font-size: 1.6rem;
+    }
+    
+    /* Form optimizations */
+    .form-description {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .form-section {
+        padding: 15px;
+    }
+    
+    .form-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        font-size: 0.95rem;
+        margin-bottom: 6px;
+    }
+    
+    .form-group small {
+        font-size: 0.8rem;
+        line-height: 1.4;
+    }
+    
+    /* Prediction result mobile */
+    .prediction-result {
+        padding: 20px;
+        margin-top: 20px;
     }
     
     .result-display {
         font-size: 1.2rem;
+        margin-bottom: 15px;
     }
     
     .result-value {
+        font-size: 2rem;
+        margin: 0 10px;
+    }
+    
+    .result-details {
+        padding: 15px;
+    }
+    
+    .details-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    /* Table responsiveness */
+    .importance-table {
+        font-size: 0.9rem;
+        max-height: 300px;
+    }
+    
+    .importance-table th,
+    .importance-table td {
+        padding: 8px;
+    }
+    
+    /* Chart container */
+    .importance-chart {
+        height: 300px;
+        margin-bottom: 20px;
+    }
+    
+    /* Metric cards mobile */
+    .metric-card {
+        padding: 15px;
+    }
+    
+    .metric-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .metric {
+        margin-bottom: 8px;
+    }
+    
+    .metric-value {
+        font-size: 1rem;
+    }
+    
+    /* Footer mobile */
+    footer {
+        margin-top: 30px;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+    .container {
+        padding: 8px;
+    }
+    
+    header h1 {
         font-size: 1.5rem;
+    }
+    
+    .card {
+        padding: 12px;
+    }
+    
+    .form-section {
+        padding: 12px;
+    }
+    
+    .prediction-result {
+        padding: 15px;
+    }
+    
+    .result-value {
+        font-size: 1.8rem;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Remove hover effects on touch devices */
+    .card:hover {
+        transform: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .btn-primary:hover,
+    .btn-secondary:hover {
+        transform: none;
+    }
+    
+    /* Better touch feedback */
+    .btn-primary:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    .btn-secondary:active {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+    
+    /* Form input touch feedback */
+    .form-group input:focus,
+    .form-group select:focus {
+        transform: none;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+}
+
+/* Landscape phone orientation */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    header {
+        margin-bottom: 20px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .dashboard {
+        gap: 15px;
+    }
+    
+    .card {
+        padding: 15px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Ensure crisp rendering on retina displays */
+    .card {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 }
