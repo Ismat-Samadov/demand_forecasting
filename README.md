@@ -1133,12 +1133,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **scikit-learn**: Machine learning library
 - **Chart.js**: Interactive visualizations
 
-## 📞 Support
-
-- **📧 Website**: ismat.pro
-
----
-
 **Built with ❤️ for Supply Chain Excellence**
 
 *Transforming retail operations through intelligent demand forecasting*
